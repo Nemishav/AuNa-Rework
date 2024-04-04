@@ -4,6 +4,7 @@ For all packages in /packages/src
 - Write a description for each package in the README, that describes the folder structure, and the content of the package
 - Test each launch file, and document any launch files with errors (there may be missing packages, which still need to be copied over from /packages_todo/src).
 - Write a description about the function of each launch file
+- Test out the integration of Nav2 and the vehicles, using the auna_scenarios launch files. Fix any broken dependencies or parameter files.
 
 For the packages in /packages_todo/src
 
