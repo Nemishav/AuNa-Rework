@@ -49,7 +49,23 @@ EXPOSE 11345
 
 # --- Install AuNa ---
 
-RUN apt-get -y install python3-pip python3-colcon-common-extensions ros-humble-xacro ros-humble-rmw-cyclonedds-cpp ros-humble-gazebo-ros-pkgs ros-humble-navigation2 ros-humble-nav2-bringup ros-humble-libg2o libspnav-dev libasio-dev libbluetooth-dev libcwiid-dev libgeographic-dev
+RUN apt-get update
+RUN apt-get -y install python3-pip            
+RUN apt-get -y install python3-colcon-common-extensions
+RUN apt-get -y install ros-humble-xacro
+RUN apt-get -y install ros-humble-rmw-cyclonedds-cpp
+RUN apt-get -y install ros-humble-gazebo-ros-pkgs
+RUN apt-get -y install ros-humble-navigation2
+RUN apt-get -y install ros-humble-nav2-bringup
+RUN apt-get -y install ros-humble-libg2o
+RUN apt-get -y install libspnav-dev
+RUN apt-get -y install libasio-dev
+RUN apt-get -y install libbluetooth-dev
+RUN apt-get -y install libcwiid-dev
+RUN apt-get -y install libgeographic-dev
+
+Run apt-get -y install ros-humble-ackermann-msgs
+
 
 # --- Set up user ---
 
