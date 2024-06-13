@@ -78,7 +78,7 @@ RUN echo '. /opt/ros/humble/setup.sh' >> /home/vscode/.bashrc
 # configure environment variables
 
 # options DISPLAY=unix:0 or DISPLAY=unix:1
-ENV DISPLAY=unix:0
+ENV DISPLAY=unix:1
 
 ENV ROS_LOCALHOST_ONLY=0
 ENV ROS_DOMAIN_ID=0

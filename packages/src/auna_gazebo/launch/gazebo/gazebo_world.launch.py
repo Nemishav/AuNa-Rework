@@ -19,14 +19,11 @@ def include_launch_description(context: LaunchContext):
     # Paths to folders and files
     world = os.path.join(get_package_share_directory('auna_gazebo'), 'worlds', str(context.launch_configurations['world_name'])+'.world')
 
-    state = LaunchConfiguration('gazebo_ros_state', default='true')
-
     # Nodes and other launch files
     gazebo_launch_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(os.path.join(pkg_gazebo_ros, 'launch', 'gazebo.launch.py')),
         launch_arguments={
-            'world': world,
-            'gazebo_ros_state': state,
+            'world': world
         }.items()
     )
 
