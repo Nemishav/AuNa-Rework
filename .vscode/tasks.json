@@ -6,7 +6,7 @@
         {
             "label": "ROS2Build",
             "type": "shell",
-            "command": "cd packages && colcon build --symlink-install --allow-overriding rclcpp --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON && mv build/compile_commands.json ..",
+            "command": "cd /home/vscode/workspace/packages && colcon build --symlink-install --allow-overriding rclcpp --cmake-args -DCMAKE_EXPORT_COMPILE_COMMANDS=ON && mv build/compile_commands.json ..",
             "problemMatcher": []
         },
         {
@@ -21,7 +21,7 @@
             "presentation": {
               "echo": true,
               "reveal": "always",
-              "focus": false,
+              "focus": true,
               "panel": "shared",
               "showReuseMessage": false,
               "clear": true
