@@ -10,6 +10,12 @@
             "problemMatcher": []
         },
         {
+            "label": "ROS2Test",
+            "type": "shell",
+            "command": "cd /home/vscode/workspace/packages && colcon test --packages-select auna_gazebo",
+            "problemMatcher": []
+        },
+        {
             "label": "Auna-Gazebo: Gazebo Launch World",
             "type": "shell",
             "command": "source packages/install/setup.bash && /home/vscode/workspace/packages/src/auna_gazebo/.vscode/gazebo_world.sh",

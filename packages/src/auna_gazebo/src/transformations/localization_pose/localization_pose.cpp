@@ -1,3 +1,9 @@
+// Copyright (c) 2024 Harun Teper
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file or at
+// https://opensource.org/licenses/MIT.
+
 #include "auna_gazebo/localization_pose.hpp"
 
 // Create a publisher, subscriber and prefix. Initialize the transform buffer and listener.

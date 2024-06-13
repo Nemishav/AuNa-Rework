@@ -1,3 +1,9 @@
+// Copyright (c) 2024 Harun Teper
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file or at
+// https://opensource.org/licenses/MIT.
+
 #include "auna_physical/waypoint_publisher.hpp"
 
 WaypointPublisher::WaypointPublisher() : Node("waypoint_publisher"), tf_buffer_(this->get_clock()), tf_listener_(tf_buffer_)

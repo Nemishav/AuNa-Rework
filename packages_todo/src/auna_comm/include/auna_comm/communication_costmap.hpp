@@ -1,3 +1,9 @@
+// Copyright (c) 2024 Harun Teper
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file or at
+// https://opensource.org/licenses/MIT.
+
 #ifndef COMMUNICATION_COSTMAP_HPP_
 #define COMMUNICATION_COSTMAP_HPP_
 
