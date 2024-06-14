@@ -21,40 +21,38 @@
 #ifndef AUNA_PURE_PURSUIT_CONTROLLER__COLLISION_CHECKER_HPP_
 #define AUNA_PURE_PURSUIT_CONTROLLER__COLLISION_CHECKER_HPP_
 
+#include <algorithm>
+#include <memory>
+#include <mutex>
 #include <string>
 #include <vector>
-#include <memory>
-#include <algorithm>
-#include <mutex>
 
-#include "rclcpp/rclcpp.hpp"
+#include "auna_pure_pursuit/parameter_handler.hpp"
+#include "geometry_msgs/msg/pose2_d.hpp"
 #include "nav2_costmap_2d/costmap_2d_ros.hpp"
 #include "nav2_costmap_2d/footprint_collision_checker.hpp"
 #include "nav2_util/odometry_utils.hpp"
-#include "geometry_msgs/msg/pose2_d.hpp"
-#include "auna_pure_pursuit/parameter_handler.hpp"
+#include "rclcpp/rclcpp.hpp"
 
 #include "nav2_core/exceptions.hpp"
-#include "nav2_util/node_utils.hpp"
-#include "nav2_util/geometry_utils.hpp"
 #include "nav2_costmap_2d/costmap_filters/filter_values.hpp"
+#include "nav2_util/geometry_utils.hpp"
+#include "nav2_util/node_utils.hpp"
 
-namespace auna_pure_pursuit_controller
-{
+namespace auna_pure_pursuit_controller {
 
 /**
  * @class auna_pure_pursuit_controller::CollisionChecker
  * @brief Checks for collision based on a RPP control command
  */
-class CollisionChecker
-{
-public:
+class CollisionChecker {
+ public:
   /**
    * @brief Constructor for auna_pure_pursuit_controller::CollisionChecker
    */
-  CollisionChecker(
-    rclcpp_lifecycle::LifecycleNode::SharedPtr node,
-    std::shared_ptr<nav2_costmap_2d::Costmap2DROS> costmap_ros, Parameters * params);
+  CollisionChecker(rclcpp_lifecycle::LifecycleNode::SharedPtr node,
+                   std::shared_ptr<nav2_costmap_2d::Costmap2DROS> costmap_ros,
+                   Parameters *params);
 
   /**
    * @brief Destrructor for auna_pure_pursuit_controller::CollisionChecker
@@ -70,10 +68,8 @@ public:
    * @param carrot_dist Distance to the carrot for PP
    * @return Whether collision is imminent
    */
-  bool isCollisionImminent(
-    const geometry_msgs::msg::PoseStamped &,
-    const double &, const double &,
-    const double &);
+  bool isCollisionImminent(const geometry_msgs::msg::PoseStamped &,
+                           const double &, const double &, const double &);
 
   /**
    * @brief checks for collision at projected pose
@@ -82,10 +78,7 @@ public:
    * @param theta orientation of Yaw
    * @return Whether in collision
    */
-  bool inCollision(
-    const double & x,
-    const double & y,
-    const double & theta);
+  bool inCollision(const double &x, const double &y, const double &theta);
 
   /**
    * @brief Cost at a point
@@ -93,16 +86,18 @@ public:
    * @param y Pose of pose y
    * @return Cost of pose in costmap
    */
-  double costAtPose(const double & x, const double & y);
+  double costAtPose(const double &x, const double &y);
 
-protected:
-  rclcpp::Logger logger_ {rclcpp::get_logger("RPPCollisionChecker")};
+ protected:
+  rclcpp::Logger logger_{rclcpp::get_logger("RPPCollisionChecker")};
   std::shared_ptr<nav2_costmap_2d::Costmap2DROS> costmap_ros_;
-  nav2_costmap_2d::Costmap2D * costmap_;
-  std::unique_ptr<nav2_costmap_2d::FootprintCollisionChecker<nav2_costmap_2d::Costmap2D *>>
-  footprint_collision_checker_;
-  Parameters * params_;
-  std::shared_ptr<rclcpp_lifecycle::LifecyclePublisher<nav_msgs::msg::Path>> carrot_arc_pub_;
+  nav2_costmap_2d::Costmap2D *costmap_;
+  std::unique_ptr<
+      nav2_costmap_2d::FootprintCollisionChecker<nav2_costmap_2d::Costmap2D *>>
+      footprint_collision_checker_;
+  Parameters *params_;
+  std::shared_ptr<rclcpp_lifecycle::LifecyclePublisher<nav_msgs::msg::Path>>
+      carrot_arc_pub_;
   rclcpp::Clock::SharedPtr clock_;
 };
 

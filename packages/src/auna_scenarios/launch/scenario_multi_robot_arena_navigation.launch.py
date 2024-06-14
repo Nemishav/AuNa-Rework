@@ -44,13 +44,15 @@ def generate_launch_description():
 
     # Nodes and other launch files
     world_cmd = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(gazebo_launch_file_dir, 'gazebo_world.launch.py')),
+        PythonLaunchDescriptionSource(os.path.join(
+            gazebo_launch_file_dir, 'gazebo_world.launch.py')),
         launch_arguments={
             'world_name': world_name
         }.items(),
     )
     spawn_cmd = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(spawn_launch_file_dir, 'spawn_multi_robot.launch.py')),
+        PythonLaunchDescriptionSource(os.path.join(
+            spawn_launch_file_dir, 'spawn_multi_robot.launch.py')),
         launch_arguments={
             'robot_number': robot_number,
             'world_name': world_name,
@@ -58,7 +60,8 @@ def generate_launch_description():
         }.items(),
     )
     nav_cmd = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(nav_launch_file_dir, 'navigation_multi_robot.launch.py')),
+        PythonLaunchDescriptionSource(os.path.join(
+            nav_launch_file_dir, 'navigation_multi_robot.launch.py')),
         launch_arguments={
             'robot_number': robot_number,
             'world_name': world_name,
@@ -70,7 +73,8 @@ def generate_launch_description():
         }.items(),
     )
     comm_cmd = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(comm_launch_file_dir, 'multi_cam_communication.launch.py')),
+        PythonLaunchDescriptionSource(os.path.join(
+            comm_launch_file_dir, 'multi_cam_communication.launch.py')),
         launch_arguments={
             'robot_number': robot_number
         }.items(),

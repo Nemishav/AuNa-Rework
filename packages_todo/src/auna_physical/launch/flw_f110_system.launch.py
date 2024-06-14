@@ -37,25 +37,29 @@ def include_launch_description(context: LaunchContext):
     cmds = []
 
     platform_cmd = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(launch_file_dir, 'f110_platform.launch.py')),
+        PythonLaunchDescriptionSource(os.path.join(
+            launch_file_dir, 'f110_platform.launch.py')),
         launch_arguments={
             'namespace': namespace.perform(context)+robot_index.perform(context),
         }.items(),
     )
     nav_cmd = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(launch_file_dir, 'f110_navigation.launch.py')),
+        PythonLaunchDescriptionSource(os.path.join(
+            launch_file_dir, 'f110_navigation.launch.py')),
         launch_arguments={
             'namespace': namespace.perform(context)+robot_index.perform(context),
         }.items(),
     )
     vicon_cmd = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(launch_file_dir, 'vicon_tf_converter.launch.py')),
+        PythonLaunchDescriptionSource(os.path.join(
+            launch_file_dir, 'vicon_tf_converter.launch.py')),
         launch_arguments={
             'namespace': namespace.perform(context)+robot_index.perform(context),
         }.items(),
     )
     cam_cmd = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(cam_launch_file_dir, 'cam_communication.launch.py')),
+        PythonLaunchDescriptionSource(os.path.join(
+            cam_launch_file_dir, 'cam_communication.launch.py')),
         launch_arguments={
             'namespace': namespace.perform(context)+robot_index.perform(context),
             'robot_index': robot_index,
@@ -63,7 +67,8 @@ def include_launch_description(context: LaunchContext):
         }.items(),
     )
     cacc_cmd = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(cacc_launch_file_dir, 'single_cacc_controller.launch.py')),
+        PythonLaunchDescriptionSource(os.path.join(
+            cacc_launch_file_dir, 'single_cacc_controller.launch.py')),
         launch_arguments={
             'namespace': namespace.perform(context)+robot_index.perform(context),
         }.items(),
@@ -87,8 +92,10 @@ def generate_launch_description():
     namespace_arg = DeclareLaunchArgument('namespace', default_value='robot')
     robot_index_arg = DeclareLaunchArgument('robot_index', default_value='0')
     cam_index_arg = DeclareLaunchArgument('cam_index', default_value='1')
-    enable_navigation_arg = DeclareLaunchArgument('enable_navigation', default_value='false')
-    enable_cacc_arg = DeclareLaunchArgument('enable_cacc', default_value='false')
+    enable_navigation_arg = DeclareLaunchArgument(
+        'enable_navigation', default_value='false')
+    enable_cacc_arg = DeclareLaunchArgument(
+        'enable_cacc', default_value='false')
 
     # Launch Description
     launch_description = LaunchDescription()
@@ -99,6 +106,7 @@ def generate_launch_description():
     launch_description.add_action(enable_cacc_arg)
     launch_description.add_action(cam_index_arg)
 
-    launch_description.add_action(OpaqueFunction(function=include_launch_description))
+    launch_description.add_action(OpaqueFunction(
+        function=include_launch_description))
 
     return launch_description

@@ -19,7 +19,7 @@ def include_launch_description(context: LaunchContext):
 
     # Launch Argument Configurations
     robot_number = LaunchConfiguration('robot_number', default='2')
-    
+
     launch_description_content = []
 
     for num in range(int(robot_number.perform(context))-1):
@@ -51,6 +51,7 @@ def generate_launch_description():
 
     launch_description.add_action(robot_number_arg)
 
-    launch_description.add_action(OpaqueFunction(function=include_launch_description))
+    launch_description.add_action(OpaqueFunction(
+        function=include_launch_description))
 
     return launch_description

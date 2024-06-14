@@ -22,39 +22,39 @@
 #ifndef AUNA_PURE_PURSUIT_CONTROLLER__AUNA_PURE_PURSUIT_CONTROLLER_HPP_
 #define AUNA_PURE_PURSUIT_CONTROLLER__AUNA_PURE_PURSUIT_CONTROLLER_HPP_
 
+#include <algorithm>
+#include <memory>
+#include <mutex>
 #include <string>
 #include <vector>
-#include <memory>
-#include <algorithm>
-#include <mutex>
 
-#include "nav2_core/controller.hpp"
-#include "rclcpp/rclcpp.hpp"
-#include "pluginlib/class_loader.hpp"
-#include "pluginlib/class_list_macros.hpp"
-#include "geometry_msgs/msg/pose2_d.hpp"
-#include "auna_pure_pursuit/path_handler.hpp"
 #include "auna_pure_pursuit/collision_checker.hpp"
 #include "auna_pure_pursuit/parameter_handler.hpp"
+#include "auna_pure_pursuit/path_handler.hpp"
 #include "auna_pure_pursuit/regulation_functions.hpp"
+#include "geometry_msgs/msg/pose2_d.hpp"
+#include "nav2_core/controller.hpp"
+#include "pluginlib/class_list_macros.hpp"
+#include "pluginlib/class_loader.hpp"
+#include "rclcpp/rclcpp.hpp"
 
-namespace auna_pure_pursuit_controller
-{
+namespace auna_pure_pursuit_controller {
 
 /**
  * @class auna_pure_pursuit_controller::AuNaPurePursuitController
  * @brief AuNa pure pursuit controller plugin
  */
-class AuNaPurePursuitController : public nav2_core::Controller
-{
-public:
+class AuNaPurePursuitController : public nav2_core::Controller {
+ public:
   /**
-   * @brief Constructor for nav2_pure_pursuit_controller::AuNaPurePursuitController
+   * @brief Constructor for
+   * nav2_pure_pursuit_controller::AuNaPurePursuitController
    */
   AuNaPurePursuitController() = default;
 
   /**
-   * @brief Destrructor for nav2_pure_pursuit_controller::AuNaPurePursuitController
+   * @brief Destrructor for
+   * nav2_pure_pursuit_controller::AuNaPurePursuitController
    */
   ~AuNaPurePursuitController() override = default;
 
@@ -65,11 +65,10 @@ public:
    * @param tf TF buffer
    * @param costmap_ros Costmap2DROS object of environment
    */
-  void configure(
-    const rclcpp_lifecycle::LifecycleNode::WeakPtr & parent,
-    std::string name, 
-    const std::shared_ptr<tf2_ros::Buffer> & tf,
-    const std::shared_ptr<nav2_costmap_2d::Costmap2DROS> & costmap_ros) override;
+  void configure(const rclcpp_lifecycle::LifecycleNode::WeakPtr &parent,
+                 std::string name, const std::shared_ptr<tf2_ros::Buffer> &tf,
+                 const std::shared_ptr<nav2_costmap_2d::Costmap2DROS>
+                     &costmap_ros) override;
 
   /**
    * @brief Cleanup controller state machine
@@ -87,7 +86,8 @@ public:
   void deactivate() override;
 
   /**
-   * @brief Compute the best command given the current pose and velocity, with possible debug information
+   * @brief Compute the best command given the current pose and velocity, with
+   * possible debug information
    *
    * Same as above computeVelocityCommands, but with debug results.
    * If the results pointer is not null, additional information about the twists
@@ -95,19 +95,20 @@ public:
    *
    * @param pose      Current robot pose
    * @param velocity  Current robot velocity
-   * @param goal_checker   Ptr to the goal checker for this task in case useful in computing commands
+   * @param goal_checker   Ptr to the goal checker for this task in case useful
+   * in computing commands
    * @return          Best command
    */
   geometry_msgs::msg::TwistStamped computeVelocityCommands(
-    const geometry_msgs::msg::PoseStamped & pose,
-    const geometry_msgs::msg::Twist & velocity,
-    nav2_core::GoalChecker * /*goal_checker*/) override;
+      const geometry_msgs::msg::PoseStamped &pose,
+      const geometry_msgs::msg::Twist &velocity,
+      nav2_core::GoalChecker * /*goal_checker*/) override;
 
   /**
    * @brief nav2_core setPlan - Sets the global plan
    * @param path The global plan
    */
-  void setPlan(const nav_msgs::msg::Path & path) override;
+  void setPlan(const nav_msgs::msg::Path &path) override;
 
   /**
    * @brief Limits the maximum linear speed of the robot.
@@ -116,9 +117,10 @@ public:
    * @param percentage Setting speed limit in percentage if true
    * or in absolute values in false case.
    */
-  void setSpeedLimit(const double & speed_limit, const bool & percentage) override;
+  void setSpeedLimit(const double &speed_limit,
+                     const bool &percentage) override;
 
-protected:
+ protected:
   /**
    * @brief Get lookahead distance
    * @param cmd the current speed to use to compute lookahead point
@@ -132,7 +134,7 @@ protected:
    * @return CarrotMsg a carrot point marker, PointStamped
    */
   std::unique_ptr<geometry_msgs::msg::PointStamped> createCarrotMsg(
-    const geometry_msgs::msg::PoseStamped & carrot_pose);
+      const geometry_msgs::msg::PoseStamped &carrot_pose);
 
   /**
    * @brief Whether robot should rotate to rough path heading
@@ -140,15 +142,16 @@ protected:
    * @param angle_to_path Angle of robot output relatie to carrot marker
    * @return Whether should rotate to path heading
    */
-  bool shouldRotateToPath(
-    const geometry_msgs::msg::PoseStamped & carrot_pose, double & angle_to_path);
+  bool shouldRotateToPath(const geometry_msgs::msg::PoseStamped &carrot_pose,
+                          double &angle_to_path);
 
   /**
    * @brief Whether robot should rotate to final goal orientation
    * @param carrot_pose current lookahead point
    * @return Whether should rotate to goal heading
    */
-  bool shouldRotateToGoalHeading(const geometry_msgs::msg::PoseStamped & carrot_pose);
+  bool shouldRotateToGoalHeading(
+      const geometry_msgs::msg::PoseStamped &carrot_pose);
 
   /**
    * @brief Create a smooth and kinematically smoothed rotation command
@@ -157,9 +160,9 @@ protected:
    * @param angle_to_path Angle of robot output relatie to carrot marker
    * @param curr_speed the current robot speed
    */
-  void rotateToHeading(
-    double & linear_vel, double & angular_vel,
-    const double & angle_to_path, const geometry_msgs::msg::Twist & curr_speed);
+  void rotateToHeading(double &linear_vel, double &angular_vel,
+                       const double &angle_to_path,
+                       const geometry_msgs::msg::Twist &curr_speed);
 
   /**
    * @brief apply regulation constraints to the system
@@ -169,10 +172,11 @@ protected:
    * @param speed Speed of robot
    * @param pose_cost cost at this pose
    */
-  void applyConstraints(
-    const double & curvature, const geometry_msgs::msg::Twist & speed,
-    const double & pose_cost, const nav_msgs::msg::Path & path,
-    double & linear_vel, double & sign);
+  void applyConstraints(const double &curvature,
+                        const geometry_msgs::msg::Twist &speed,
+                        const double &pose_cost,
+                        const nav_msgs::msg::Path &path, double &linear_vel,
+                        double &sign);
 
   /**
    * @brief Find the intersection a circle and a line segment.
@@ -184,9 +188,8 @@ protected:
    * @return point of intersection
    */
   static geometry_msgs::msg::Point circleSegmentIntersection(
-    const geometry_msgs::msg::Point & p1,
-    const geometry_msgs::msg::Point & p2,
-    double r);
+      const geometry_msgs::msg::Point &p1, const geometry_msgs::msg::Point &p2,
+      double r);
 
   /**
    * @brief Get lookahead point
@@ -194,33 +197,39 @@ protected:
    * @param path Current global path
    * @return Lookahead point
    */
-  geometry_msgs::msg::PoseStamped getLookAheadPoint(const double &, const nav_msgs::msg::Path &);
+  geometry_msgs::msg::PoseStamped getLookAheadPoint(
+      const double &, const nav_msgs::msg::Path &);
 
   /**
    * @brief checks for the cusp position
    * @param pose Pose input to determine the cusp position
    * @return robot distance from the cusp
    */
-  double findVelocitySignChange(const nav_msgs::msg::Path & transformed_plan);
+  double findVelocitySignChange(const nav_msgs::msg::Path &transformed_plan);
 
   rclcpp_lifecycle::LifecycleNode::WeakPtr node_;
   std::shared_ptr<tf2_ros::Buffer> tf_;
   std::string plugin_name_;
   std::shared_ptr<nav2_costmap_2d::Costmap2DROS> costmap_ros_;
-  nav2_costmap_2d::Costmap2D * costmap_;
-  rclcpp::Logger logger_ {rclcpp::get_logger("AuNaPurePursuitController")};
+  nav2_costmap_2d::Costmap2D *costmap_;
+  rclcpp::Logger logger_{rclcpp::get_logger("AuNaPurePursuitController")};
 
-  Parameters * params_;
+  Parameters *params_;
   double goal_dist_tol_;
   double control_duration_;
 
-  std::shared_ptr<rclcpp_lifecycle::LifecyclePublisher<nav_msgs::msg::Path>> global_path_pub_;
-  std::shared_ptr<rclcpp_lifecycle::LifecyclePublisher<geometry_msgs::msg::PointStamped>>
-  carrot_pub_;
-  std::shared_ptr<rclcpp_lifecycle::LifecyclePublisher<nav_msgs::msg::Path>> carrot_arc_pub_;
+  std::shared_ptr<rclcpp_lifecycle::LifecyclePublisher<nav_msgs::msg::Path>>
+      global_path_pub_;
+  std::shared_ptr<
+      rclcpp_lifecycle::LifecyclePublisher<geometry_msgs::msg::PointStamped>>
+      carrot_pub_;
+  std::shared_ptr<rclcpp_lifecycle::LifecyclePublisher<nav_msgs::msg::Path>>
+      carrot_arc_pub_;
   std::unique_ptr<auna_pure_pursuit_controller::PathHandler> path_handler_;
-  std::unique_ptr<auna_pure_pursuit_controller::ParameterHandler> param_handler_;
-  std::unique_ptr<auna_pure_pursuit_controller::CollisionChecker> collision_checker_;
+  std::unique_ptr<auna_pure_pursuit_controller::ParameterHandler>
+      param_handler_;
+  std::unique_ptr<auna_pure_pursuit_controller::CollisionChecker>
+      collision_checker_;
 };
 
 }  // namespace auna_pure_pursuit_controller

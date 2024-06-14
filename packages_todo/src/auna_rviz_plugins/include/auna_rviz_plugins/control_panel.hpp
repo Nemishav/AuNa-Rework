@@ -4,29 +4,27 @@
 // license that can be found in the LICENSE file or at
 // https://opensource.org/licenses/MIT.
 
-#include <rclcpp/rclcpp.hpp>
-#include <std_srvs/srv/empty.hpp>
 #include <QLineEdit>
 #include <QPushButton>
 #include <QVBoxLayout>
+#include <rclcpp/rclcpp.hpp>
 #include <rviz_common/panel.hpp>
+#include <std_srvs/srv/empty.hpp>
 
-namespace auna_rviz_plugins
-{
+namespace auna_rviz_plugins {
 
-class ControlPanel : public rviz_common::Panel
-{
+class ControlPanel : public rviz_common::Panel {
   Q_OBJECT
-public:
+ public:
   ControlPanel(QWidget* parent = nullptr);
-  
-public Q_SLOTS:
+
+ public Q_SLOTS:
   void onEmergencyStopClicked();
   void onChangeVelocityClicked();
 
-private:
+ private:
   QLineEdit* velocity_input_;
   rclcpp::Node::SharedPtr node_;
 };
-  
-} // namespace auna_rviz_plugins
+
+}  // namespace auna_rviz_plugins

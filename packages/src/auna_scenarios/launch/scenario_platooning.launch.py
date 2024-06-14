@@ -27,7 +27,8 @@ def include_launch_description(context: LaunchContext):
 
     # Launch Argument Configurations
     robot_number = LaunchConfiguration('robot_number', default='2')
-    world_name = LaunchConfiguration('world_name', default='racetrack_decorated')
+    world_name = LaunchConfiguration(
+        'world_name', default='racetrack_decorated')
 
     # Nodes and other launch files
     launch_description_content = []
@@ -35,7 +36,8 @@ def include_launch_description(context: LaunchContext):
     # Nodes and other launch files
     launch_description_content.append(
         IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(os.path.join(scenario_launch_file_dir, 'scenario_omnet_multi_robot_racetrack.launch.py')),
+            PythonLaunchDescriptionSource(os.path.join(
+                scenario_launch_file_dir, 'scenario_omnet_multi_robot_racetrack.launch.py')),
             launch_arguments={
                 'robot_number': robot_number,
                 'world_name': world_name
@@ -45,7 +47,8 @@ def include_launch_description(context: LaunchContext):
 
     launch_description_content.append(
         IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(os.path.join(cacc_launch_file_dir, 'cacc_controller.launch.py')),
+            PythonLaunchDescriptionSource(os.path.join(
+                cacc_launch_file_dir, 'cacc_controller.launch.py')),
             launch_arguments={
                 'robot_number': robot_number
             }.items(),
@@ -88,6 +91,7 @@ def generate_launch_description():
     launch_description.add_action(robot_number_arg)
     launch_description.add_action(world_name_arg)
 
-    launch_description.add_action(OpaqueFunction(function=include_launch_description))
+    launch_description.add_action(OpaqueFunction(
+        function=include_launch_description))
 
     return launch_description

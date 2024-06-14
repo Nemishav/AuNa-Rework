@@ -22,14 +22,17 @@ from launch.events import matches_action
 from launch.launch_context import LaunchContext
 from auna_common import yaml_launch
 
+
 def include_launch_description(context: LaunchContext):
     """Return launch description"""
 
     # File Paths
-    config_file_path = os.path.join(get_package_share_directory('auna_physical'),'config','lidar_params.yaml')
+    config_file_path = os.path.join(get_package_share_directory(
+        'auna_physical'), 'config', 'lidar_params.yaml')
 
     tmp_params_file = yaml_launch.get_yaml(config_file_path)
-    tmp_params_file = yaml_launch.insert_namespace(tmp_params_file, context.launch_configurations['namespace'])
+    tmp_params_file = yaml_launch.insert_namespace(
+        tmp_params_file, context.launch_configurations['namespace'])
     tmp_params_file = yaml_launch.get_temp_file(tmp_params_file)
 
     with open(tmp_params_file, 'r') as file:
@@ -55,23 +58,24 @@ def include_launch_description(context: LaunchContext):
     remappings = [('/tf', 'tf'),
                   ('/tf_static', 'tf_static')]
 
-
     if namespace.perform(context) == "":
         static_transform_node = Node(
             package="tf2_ros",
             executable="static_transform_publisher",
-            output="screen" ,
+            output="screen",
             namespace=namespace,
-            arguments=["0.21", "0", "0.135", "0", "0", "0", "base_link", "laser"],
+            arguments=["0.21", "0", "0.135", "0",
+                       "0", "0", "base_link", "laser"],
             remappings=remappings
         )
     else:
         static_transform_node = Node(
             package="tf2_ros",
             executable="static_transform_publisher",
-            output="screen" ,
+            output="screen",
             namespace=namespace,
-            arguments=["0.21", "0", "0.135", "0", "0", "0", namespace.perform(context)+"/base_link", namespace.perform(context)+"/laser"],
+            arguments=["0.21", "0", "0.135", "0", "0", "0", namespace.perform(
+                context)+"/base_link", namespace.perform(context)+"/laser"],
             remappings=remappings
         )
 
@@ -107,7 +111,6 @@ def include_launch_description(context: LaunchContext):
         condition=IfCondition(auto_start),
     )
 
-
     launch_description_content = []
 
     launch_description_content.append(lifecycle_node)
@@ -121,10 +124,12 @@ def include_launch_description(context: LaunchContext):
 def generate_launch_description():
     """Return launch description"""
 
-    #Launch arguments
+    # Launch arguments
     autostart_arg = DeclareLaunchArgument('auto_start', default_value='true')
-    node_name_arg = DeclareLaunchArgument('node_name', default_value='urg_node2')
-    scan_topic_name_arg = DeclareLaunchArgument('scan_topic_name', default_value='scan')
+    node_name_arg = DeclareLaunchArgument(
+        'node_name', default_value='urg_node2')
+    scan_topic_name_arg = DeclareLaunchArgument(
+        'scan_topic_name', default_value='scan')
     namespace_arg = DeclareLaunchArgument('namespace', default_value='robot')
 
     # Launch Description
@@ -135,6 +140,7 @@ def generate_launch_description():
     launch_description.add_action(scan_topic_name_arg)
     launch_description.add_action(namespace_arg)
 
-    launch_description.add_action(OpaqueFunction(function=include_launch_description))
+    launch_description.add_action(OpaqueFunction(
+        function=include_launch_description))
 
     return launch_description

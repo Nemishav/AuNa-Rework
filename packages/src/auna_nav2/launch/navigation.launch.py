@@ -142,6 +142,7 @@ def generate_launch_description():
     launch_description.add_action(autostart_arg)
     launch_description.add_action(params_file_arg)
 
-    launch_description.add_action(OpaqueFunction(function=include_launch_description))
+    launch_description.add_action(OpaqueFunction(
+        function=include_launch_description))
 
     return launch_description

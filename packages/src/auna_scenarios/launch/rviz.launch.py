@@ -7,9 +7,10 @@
 import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument,IncludeLaunchDescription
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
+
 
 def generate_launch_description():
     """Return launch description"""
@@ -24,13 +25,17 @@ def generate_launch_description():
     nav_launch_file_dir = os.path.join(navigation_pkg_dir, 'launch')
 
     # Paths to folders and files
-    default_rviz_config_file = os.path.join(navigation_pkg_dir, 'rviz','empty_config.rviz')
-    default_params_file = os.path.join(navigation_pkg_dir, 'config', 'nav2_params', 'nav2_params.yaml')
+    default_rviz_config_file = os.path.join(
+        navigation_pkg_dir, 'rviz', 'empty_config.rviz')
+    default_params_file = os.path.join(
+        navigation_pkg_dir, 'config', 'nav2_params', 'nav2_params.yaml')
     map_path = os.path.join(navigation_pkg_dir, 'maps', 'arena', 'map.yaml')
 
     # Launch Argument Configurations
-    world_name = LaunchConfiguration('world_name', default='racetrack_decorated')
-    rviz_config = LaunchConfiguration('rviz_config', default = default_rviz_config_file)
+    world_name = LaunchConfiguration(
+        'world_name', default='racetrack_decorated')
+    rviz_config = LaunchConfiguration(
+        'rviz_config', default=default_rviz_config_file)
     world_name = LaunchConfiguration('world_name')
 
     # Launch Arguments
@@ -42,23 +47,26 @@ def generate_launch_description():
 
     # Nodes and other launch files
     world_cmd = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(gazebo_launch_file_dir, 'gazebo_world.launch.py')),
+        PythonLaunchDescriptionSource(os.path.join(
+            gazebo_launch_file_dir, 'gazebo_world.launch.py')),
         launch_arguments={
             'world_name': world_name
         }.items(),
     )
     spawn_cmd = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(spawn_launch_file_dir, 'spawn_single_robot.launch.py')),
+        PythonLaunchDescriptionSource(os.path.join(
+            spawn_launch_file_dir, 'spawn_single_robot.launch.py')),
         launch_arguments={
             'world_name': world_name,
             'ground_truth': 'False'
         }.items(),
     )
     nav_cmd = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(nav_launch_file_dir, 'navigation_single_robot.launch.py')),
+        PythonLaunchDescriptionSource(os.path.join(
+            nav_launch_file_dir, 'navigation_single_robot.launch.py')),
         launch_arguments={
             'namespace': 'robot',
-            'rviz_config':rviz_config,
+            'rviz_config': rviz_config,
             'map': map_path,
             'params_file': default_params_file,
             'enable_slam': 'False',

@@ -15,6 +15,7 @@ from launch.substitutions import LaunchConfiguration
 from launch.conditions import IfCondition
 from auna_common import yaml_launch
 
+
 def generate_launch_description():
     """Return launch description"""
 
@@ -38,7 +39,8 @@ def generate_launch_description():
         executable='joy_node',
         name='joy_node',
         namespace=namespace,
-        parameters=[yaml_launch.get_yaml_value(joy_config_file_path, ['joy_node', 'ros__parameters'])],
+        parameters=[yaml_launch.get_yaml_value(
+            joy_config_file_path, ['joy_node', 'ros__parameters'])],
     )
 
     teleop_joy_node_ps4 = Node(
@@ -46,7 +48,8 @@ def generate_launch_description():
         executable='joy_teleop',
         name='joy_teleop',
         namespace=namespace,
-        parameters=[yaml_launch.get_yaml_value(joy_config_file_path, ['joy_teleop_ps4', 'ros__parameters'])],
+        parameters=[yaml_launch.get_yaml_value(
+            joy_config_file_path, ['joy_teleop_ps4', 'ros__parameters'])],
         condition=IfCondition(use_ps4),
     )
 
@@ -55,11 +58,10 @@ def generate_launch_description():
         executable='joy_teleop',
         name='joy_teleop',
         namespace=namespace,
-        parameters=[yaml_launch.get_yaml_value(joy_config_file_path, ['joy_teleop_g29', 'ros__parameters'])],
+        parameters=[yaml_launch.get_yaml_value(
+            joy_config_file_path, ['joy_teleop_g29', 'ros__parameters'])],
         condition=IfCondition(use_g29),
     )
-
-
 
     # Launch Description
     launch_description = LaunchDescription()

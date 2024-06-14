@@ -27,22 +27,22 @@ def generate_launch_description():
 
     # Nodes and other launch files
     omnet_transmitter_cmd = Node(
-            package='auna_omnet',
-            executable='omnet_transmitter',
-            name='omnet_transmitter',
-            namespace=namespace,
-            arguments={namespace},
-            output='screen'
-        )
+        package='auna_omnet',
+        executable='omnet_transmitter',
+        name='omnet_transmitter',
+        namespace=namespace,
+        arguments={namespace},
+        output='screen'
+    )
 
     omnet_receiver_cmd = Node(
-            package='auna_omnet',
-            executable='omnet_receiver',
-            name='omnet_receiver',
-            namespace=namespace,
-            arguments={namespace},
-            output='screen'
-        )
+        package='auna_omnet',
+        executable='omnet_receiver',
+        name='omnet_receiver',
+        namespace=namespace,
+        arguments={namespace},
+        output='screen'
+    )
 
     # Launch Description
     launch_description = LaunchDescription()

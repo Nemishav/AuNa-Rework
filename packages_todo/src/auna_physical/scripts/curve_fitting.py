@@ -52,7 +52,8 @@ class CurveFitting(Node):
         t = np.arange(len(waypoints))
 
         # Fine-grained sampling of waypoints
-        num_points = len(self.waypoints) * 1000  # Increase the number of points for fine-grained sampling
+        # Increase the number of points for fine-grained sampling
+        num_points = len(self.waypoints) * 1000
         t_fine = np.linspace(0, len(waypoints) - 1, num_points)
         x_fine = np.interp(t_fine, t, x)
         y_fine = np.interp(t_fine, t, y)
@@ -65,7 +66,7 @@ class CurveFitting(Node):
 
         for i in range(len(new_waypoints) - 1):
             segment_distance = np.sqrt((new_waypoints[i+1][0] - new_waypoints[i][0]) ** 2 +
-                                    (new_waypoints[i+1][1] - new_waypoints[i][1]) ** 2)
+                                       (new_waypoints[i+1][1] - new_waypoints[i][1]) ** 2)
             accumulated_distance += segment_distance
 
             if accumulated_distance >= self.get_parameter('interpolation_distance').value:
@@ -74,7 +75,7 @@ class CurveFitting(Node):
 
         # Check last waypoint distance to the first waypoint
         dist_last_to_first = np.sqrt((filtered_waypoints[-1][0] - filtered_waypoints[0][0]) ** 2 +
-                                    (filtered_waypoints[-1][1] - filtered_waypoints[0][1]) ** 2)
+                                     (filtered_waypoints[-1][1] - filtered_waypoints[0][1]) ** 2)
         if dist_last_to_first < self.get_parameter('interpolation_distance').value:
             if len(filtered_waypoints) > 1:
                 filtered_waypoints.pop()  # Remove last waypoint
@@ -87,7 +88,8 @@ class CurveFitting(Node):
 
         plt.figure(figsize=(8, 6))
         plt.plot(*zip(*self.waypoints), 'r-', label='Waypoints')
-        plt.plot(x_interpolated, y_interpolated, 'bo', label='Interpolated Points')
+        plt.plot(x_interpolated, y_interpolated,
+                 'bo', label='Interpolated Points')
 
         plt.xlabel('X')
         plt.ylabel('Y')
@@ -114,13 +116,15 @@ class CurveFitting(Node):
             self.get_logger().info('Not enough waypoints to calculate angles.')
             return
 
-        self.get_logger().info('Angles between consecutive waypoints (relative to angle of two points before):')
+        self.get_logger().info(
+            'Angles between consecutive waypoints (relative to angle of two points before):')
 
         # Calculate the angle between the first two waypoints as the starting angle
         start_angle = self.calculate_angle(
             self.interpolated_waypoints[0], self.interpolated_waypoints[1]
         )
-        self.get_logger().info(f'Waypoint 0 to 1: {np.degrees(start_angle):.2f} degrees')
+        self.get_logger().info(
+            f'Waypoint 0 to 1: {np.degrees(start_angle):.2f} degrees')
 
         # Calculate the angle between the first and second waypoints as the previous angle
         previous_angle = self.calculate_angle(
@@ -144,7 +148,8 @@ class CurveFitting(Node):
             elif relative_angle < -np.pi:
                 relative_angle += 2 * np.pi
 
-            self.get_logger().info(f'Waypoint {i} to {i + 1}: {np.degrees(relative_angle):.2f} degrees')
+            self.get_logger().info(
+                f'Waypoint {i} to {i + 1}: {np.degrees(relative_angle):.2f} degrees')
 
             # Update the previous angle for the next iteration
             previous_angle = angle

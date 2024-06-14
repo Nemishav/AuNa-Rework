@@ -19,51 +19,48 @@
 // limitations under the License.
 
 #include <algorithm>
-#include <string>
 #include <limits>
 #include <memory>
-#include <vector>
+#include <string>
 #include <utility>
+#include <vector>
 
 #include "auna_pure_pursuit/collision_checker.hpp"
 
-namespace auna_pure_pursuit_controller
-{
+namespace auna_pure_pursuit_controller {
 
 using namespace nav2_costmap_2d;  // NOLINT
 
 CollisionChecker::CollisionChecker(
-  rclcpp_lifecycle::LifecycleNode::SharedPtr node,
-  std::shared_ptr<nav2_costmap_2d::Costmap2DROS> costmap_ros,
-  Parameters * params)
-{
+    rclcpp_lifecycle::LifecycleNode::SharedPtr node,
+    std::shared_ptr<nav2_costmap_2d::Costmap2DROS> costmap_ros,
+    Parameters *params) {
   clock_ = node->get_clock();
   costmap_ros_ = costmap_ros;
   costmap_ = costmap_ros_->getCostmap();
   params_ = params;
 
   // initialize collision checker and set costmap
-  footprint_collision_checker_ = std::make_unique<nav2_costmap_2d::
-      FootprintCollisionChecker<nav2_costmap_2d::Costmap2D *>>(costmap_);
+  footprint_collision_checker_ = std::make_unique<
+      nav2_costmap_2d::FootprintCollisionChecker<nav2_costmap_2d::Costmap2D *>>(
+      costmap_);
   footprint_collision_checker_->setCostmap(costmap_);
 
-  carrot_arc_pub_ = node->create_publisher<nav_msgs::msg::Path>("lookahead_collision_arc", 1);
+  carrot_arc_pub_ =
+      node->create_publisher<nav_msgs::msg::Path>("lookahead_collision_arc", 1);
   carrot_arc_pub_->on_activate();
 }
 
 bool CollisionChecker::isCollisionImminent(
-  const geometry_msgs::msg::PoseStamped & robot_pose,
-  const double & linear_vel, const double & angular_vel,
-  const double & carrot_dist)
-{
+    const geometry_msgs::msg::PoseStamped &robot_pose, const double &linear_vel,
+    const double &angular_vel, const double &carrot_dist) {
   // Note(stevemacenski): This may be a bit unusual, but the robot_pose is in
-  // odom frame and the carrot_pose is in robot base frame. Just how the data comes to us
+  // odom frame and the carrot_pose is in robot base frame. Just how the data
+  // comes to us
 
   // check current point is OK
-  if (inCollision(
-      robot_pose.pose.position.x, robot_pose.pose.position.y,
-      tf2::getYaw(robot_pose.pose.orientation)))
-  {
+  if (inCollision(robot_pose.pose.position.x, robot_pose.pose.position.y,
+                  tf2::getYaw(robot_pose.pose.orientation))) {
     return true;
   }
 
@@ -83,15 +80,16 @@ bool CollisionChecker::isCollisionImminent(
     // theta_min = 2.0 * sin ((res/2) / r_max)
     // via isosceles triangle r_max-r_max-resolution,
     // dividing by angular_velocity gives us a timestep.
-    double max_radius = costmap_ros_->getLayeredCostmap()->getCircumscribedRadius();
-    projection_time =
-      2.0 * sin((costmap_->getResolution() / 2) / max_radius) / fabs(angular_vel);
+    double max_radius =
+        costmap_ros_->getLayeredCostmap()->getCircumscribedRadius();
+    projection_time = 2.0 * sin((costmap_->getResolution() / 2) / max_radius) /
+                      fabs(angular_vel);
   } else {
     // Normal path tracking
     projection_time = costmap_->getResolution() / fabs(linear_vel);
   }
 
-  const geometry_msgs::msg::Point & robot_xy = robot_pose.pose.position;
+  const geometry_msgs::msg::Point &robot_xy = robot_pose.pose.position;
   geometry_msgs::msg::Pose2D curr_pose;
   curr_pose.x = robot_pose.pose.position.x;
   curr_pose.y = robot_pose.pose.position.y;
@@ -99,7 +97,8 @@ bool CollisionChecker::isCollisionImminent(
 
   // only forward simulate within time requested
   int i = 1;
-  while (i * projection_time < params_->max_allowed_time_to_collision_up_to_carrot) {
+  while (i * projection_time <
+         params_->max_allowed_time_to_collision_up_to_carrot) {
     i++;
 
     // apply velocity at curr_pose over distance
@@ -108,7 +107,8 @@ bool CollisionChecker::isCollisionImminent(
     curr_pose.theta += projection_time * angular_vel;
 
     // check if past carrot pose, where no longer a thoughtfully valid command
-    if (hypot(curr_pose.x - robot_xy.x, curr_pose.y - robot_xy.y) > carrot_dist) {
+    if (hypot(curr_pose.x - robot_xy.x, curr_pose.y - robot_xy.y) >
+        carrot_dist) {
       break;
     }
 
@@ -130,27 +130,24 @@ bool CollisionChecker::isCollisionImminent(
   return false;
 }
 
-bool CollisionChecker::inCollision(
-  const double & x,
-  const double & y,
-  const double & theta)
-{
+bool CollisionChecker::inCollision(const double &x, const double &y,
+                                   const double &theta) {
   unsigned int mx, my;
 
   if (!costmap_->worldToMap(x, y, mx, my)) {
     RCLCPP_WARN_THROTTLE(
-      logger_, *(clock_), 30000,
-      "The dimensions of the costmap is too small to successfully check for "
-      "collisions as far ahead as requested. Proceed at your own risk, slow the robot, or "
-      "increase your costmap size.");
+        logger_, *(clock_), 30000,
+        "The dimensions of the costmap is too small to successfully check for "
+        "collisions as far ahead as requested. Proceed at your own risk, slow "
+        "the robot, or "
+        "increase your costmap size.");
     return false;
   }
 
   double footprint_cost = footprint_collision_checker_->footprintCostAtPose(
-    x, y, theta, costmap_ros_->getRobotFootprint());
+      x, y, theta, costmap_ros_->getRobotFootprint());
   if (footprint_cost == static_cast<double>(NO_INFORMATION) &&
-    costmap_ros_->getLayeredCostmap()->isTrackingUnknown())
-  {
+      costmap_ros_->getLayeredCostmap()->isTrackingUnknown()) {
     return false;
   }
 
@@ -158,19 +155,17 @@ bool CollisionChecker::inCollision(
   return footprint_cost >= static_cast<double>(LETHAL_OBSTACLE);
 }
 
-
-double CollisionChecker::costAtPose(const double & x, const double & y)
-{
+double CollisionChecker::costAtPose(const double &x, const double &y) {
   unsigned int mx, my;
 
   if (!costmap_->worldToMap(x, y, mx, my)) {
-    RCLCPP_FATAL(
-      logger_,
-      "The dimensions of the costmap is too small to fully include your robot's footprint, "
-      "thusly the robot cannot proceed further");
+    RCLCPP_FATAL(logger_,
+                 "The dimensions of the costmap is too small to fully include "
+                 "your robot's footprint, "
+                 "thusly the robot cannot proceed further");
     throw nav2_core::PlannerException(
-            "AuNaPurePursuitController: Dimensions of the costmap are too small "
-            "to encapsulate the robot footprint at current speeds!");
+        "AuNaPurePursuitController: Dimensions of the costmap are too small "
+        "to encapsulate the robot footprint at current speeds!");
   }
 
   unsigned char cost = costmap_->getCost(mx, my);

@@ -33,16 +33,17 @@ def include_launch_description(context: LaunchContext):
     ground_truth = LaunchConfiguration('ground_truth')
 
     # Names and poses of the robots
-    map_path = os.path.join(pkg_dir, "config", "map_params", world_name.perform(context)+".yaml")
+    map_path = os.path.join(pkg_dir, "config", "map_params",
+                            world_name.perform(context)+".yaml")
     robots = []
     for num in range(int(robot_number.perform(context))):
         robots.append({
             'name': 'robot'+str(num),
             'namespace': 'robot'+str(num),
-            'x_pose': yaml_launch.get_yaml_value(map_path, ["spawn", "offset", "x"])+num*yaml_launch.get_yaml_value(map_path, ["spawn", "linear", "x"]),
-            'y_pose': yaml_launch.get_yaml_value(map_path, ["spawn", "offset", "y"])+num*yaml_launch.get_yaml_value(map_path, ["spawn", "linear", "y"]),
-            'z_pose': yaml_launch.get_yaml_value(map_path, ["spawn", "offset", "z"])+num*yaml_launch.get_yaml_value(map_path, ["spawn", "linear", "z"]),
-            }
+            'x_pose': yaml_launch.get_yaml_value(map_path, ["spawn", "offset", "x"]) + num * yaml_launch.get_yaml_value(map_path, ["spawn", "linear", "x"]),
+            'y_pose': yaml_launch.get_yaml_value(map_path, ["spawn", "offset", "y"]) + num * yaml_launch.get_yaml_value(map_path, ["spawn", "linear", "y"]),
+            'z_pose': yaml_launch.get_yaml_value(map_path, ["spawn", "offset", "z"]) + num * yaml_launch.get_yaml_value(map_path, ["spawn", "linear", "z"]),
+        }
         )
 
     # Nodes and other launch files
@@ -51,7 +52,8 @@ def include_launch_description(context: LaunchContext):
     for robot in robots:
         launch_description_content.append(
             IncludeLaunchDescription(
-                PythonLaunchDescriptionSource(os.path.join(launch_file_dir, 'spawn_single_robot.launch.py')),
+                PythonLaunchDescriptionSource(os.path.join(
+                    launch_file_dir, 'spawn_single_robot.launch.py')),
                 launch_arguments={
                     'use_sim_time': use_sim_time,
                     'x_pose': TextSubstitution(text=str(robot['x_pose'])),
@@ -109,6 +111,7 @@ def generate_launch_description():
     launch_description.add_action(world_name_arg)
     launch_description.add_action(ground_truth_arg)
 
-    launch_description.add_action(OpaqueFunction(function=include_launch_description))
+    launch_description.add_action(OpaqueFunction(
+        function=include_launch_description))
 
     return launch_description

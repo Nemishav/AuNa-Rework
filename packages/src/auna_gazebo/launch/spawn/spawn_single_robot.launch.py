@@ -19,7 +19,6 @@ from launch.conditions import IfCondition
 from launch.substitutions import PythonExpression
 
 
-
 def generate_launch_description():
     """Return launch description"""
 
@@ -78,12 +77,16 @@ def generate_launch_description():
 
     # Nodes and other launch files
     robot_state_publisher_cmd = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(launch_file_dir, 'spawn_robot_state_publisher.launch.py')),
-        launch_arguments={'use_sim_time': use_sim_time, 'namespace': namespace}.items()
+        PythonLaunchDescriptionSource(os.path.join(
+            launch_file_dir, 'spawn_robot_state_publisher.launch.py')),
+        launch_arguments={'use_sim_time': use_sim_time,
+                          'namespace': namespace}.items()
     )
     spawn_car_cmd = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(launch_file_dir, 'spawn_car.launch.py')),
-        launch_arguments={'x_pose': x_pose, 'y_pose': y_pose, 'z_pose': z_pose, 'namespace': namespace, 'name': name}.items()
+        PythonLaunchDescriptionSource(os.path.join(
+            launch_file_dir, 'spawn_car.launch.py')),
+        launch_arguments={'x_pose': x_pose, 'y_pose': y_pose,
+                          'z_pose': z_pose, 'namespace': namespace, 'name': name}.items()
     )
     localization_pose_cmd = Node(
         package='auna_gazebo',
@@ -94,7 +97,7 @@ def generate_launch_description():
         output='screen',
         remappings=[('/tf', 'tf'),
                     ('/tf_static', 'tf_static')
-        ]
+                    ]
     )
     simulation_pose_cmd = Node(
         package='auna_gazebo',
@@ -105,7 +108,8 @@ def generate_launch_description():
         output='screen'
     )
     gazebo_pose_cmd = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(gazebo_pose_launch_file_dir, 'gazebo_pose.launch.py')),
+        PythonLaunchDescriptionSource(os.path.join(
+            gazebo_pose_launch_file_dir, 'gazebo_pose.launch.py')),
         launch_arguments={'namespace': namespace}.items()
     )
     gazebo_pose_group_cmd = GroupAction(

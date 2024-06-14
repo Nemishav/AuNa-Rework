@@ -39,14 +39,14 @@ def generate_launch_description():
 
     # Nodes and other launch files
     cam_communication_cmd = Node(
-            package='auna_comm',
-            executable='cam_communication',
-            name='cam_communication',
-            namespace=namespace,
-            parameters=[{'filter_index': filter_index},
-                        {'robot_index': robot_index}],
-            output='screen'
-        )
+        package='auna_comm',
+        executable='cam_communication',
+        name='cam_communication',
+        namespace=namespace,
+        parameters=[{'filter_index': filter_index},
+                    {'robot_index': robot_index}],
+        output='screen'
+    )
 
     # Launch Description
     launch_description = LaunchDescription()

@@ -33,7 +33,8 @@ def include_launch_description(context: LaunchContext):
     for num in range(int(robot_number.perform(context))):
         launch_description_content.append(
             IncludeLaunchDescription(
-                PythonLaunchDescriptionSource(os.path.join(omnet_launch_file_dir, 'omnet_single_robot_modules.launch.py')),
+                PythonLaunchDescriptionSource(os.path.join(
+                    omnet_launch_file_dir, 'omnet_single_robot_modules.launch.py')),
                 launch_arguments={
                     'namespace': "robot"+str(num)
                 }.items(),
@@ -58,6 +59,7 @@ def generate_launch_description():
 
     launch_description.add_action(robot_number_arg)
 
-    launch_description.add_action(OpaqueFunction(function=include_launch_description))
+    launch_description.add_action(OpaqueFunction(
+        function=include_launch_description))
 
     return launch_description

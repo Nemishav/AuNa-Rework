@@ -27,15 +27,15 @@ def generate_launch_description():
 
     # Nodes and other launch files
     mqtt_waypoint_receiver_cmd = Node(
-            package='auna_mqtt',
-            executable='mqtt_waypoint_receiver',
-            name='mqtt_waypoint_receiver',
-            namespace=namespace,
-            parameters=[{'namespace': LaunchConfiguration('namespace')}],
-            output='screen',
-            remappings=[('/tf', 'tf'),
-                        ('/tf_static', 'tf_static')]
-        )
+        package='auna_mqtt',
+        executable='mqtt_waypoint_receiver',
+        name='mqtt_waypoint_receiver',
+        namespace=namespace,
+        parameters=[{'namespace': LaunchConfiguration('namespace')}],
+        output='screen',
+        remappings=[('/tf', 'tf'),
+                    ('/tf_static', 'tf_static')]
+    )
 
     # Launch Description
     launch_description = LaunchDescription()

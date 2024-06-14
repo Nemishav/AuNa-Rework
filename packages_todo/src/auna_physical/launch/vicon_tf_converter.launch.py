@@ -13,7 +13,6 @@ from launch.actions import GroupAction
 from launch import LaunchDescription
 
 
-
 def generate_launch_description():
     """Return launch description"""
 
@@ -28,8 +27,8 @@ def generate_launch_description():
     )
 
     group_cmd = GroupAction([
-        SetRemap(src='/tf',dst='tf'),
-        SetRemap(src='/tf_static',dst='tf_static'),
+        SetRemap(src='/tf', dst='tf'),
+        SetRemap(src='/tf_static', dst='tf_static'),
         Node(
             package='auna_physical',
             executable='vicon_tf_converter',

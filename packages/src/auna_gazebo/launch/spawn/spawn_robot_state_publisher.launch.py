@@ -24,7 +24,8 @@ def include_launch_description(context: LaunchContext):
     use_sim_time = LaunchConfiguration('use_sim_time')
 
     # Configures the tf tree frames to include the namespace at the beginning, if the robot has a namespace
-    urdf_namespace = [str(context.launch_configurations['namespace'])+'/', ''][str(context.launch_configurations['namespace']) == '']
+    urdf_namespace = [str(context.launch_configurations['namespace']) +
+                      '/', ''][str(context.launch_configurations['namespace']) == '']
 
     remapping_tf = [
         ('/tf', 'tf'),
@@ -44,8 +45,8 @@ def include_launch_description(context: LaunchContext):
                     'xacro ', model,
                     ' namespace:=', urdf_namespace]),
                 'use_sim_time': use_sim_time,
-                'use_tf_static' : False
-            },
+                'use_tf_static': False
+        },
         ],
         remappings=remapping_tf
     )
@@ -90,6 +91,7 @@ def generate_launch_description():
     launch_description.add_action(namespace_arg)
     launch_description.add_action(use_sim_time_arg)
 
-    launch_description.add_action(OpaqueFunction(function=include_launch_description))
+    launch_description.add_action(OpaqueFunction(
+        function=include_launch_description))
 
     return launch_description

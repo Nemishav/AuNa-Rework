@@ -34,25 +34,29 @@ def include_launch_description(context: LaunchContext):
     cmds = []
 
     robomaster_bringup_cmd = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(robomaster_launch_file_dir, 'minimal.launch.py')),
+        PythonLaunchDescriptionSource(os.path.join(
+            robomaster_launch_file_dir, 'minimal.launch.py')),
         launch_arguments={
             'namespace': namespace.perform(context)+robot_index.perform(context),
         }.items(),
     )
     nav_cmd = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(launch_file_dir, 'f110_navigation.launch.py')),
+        PythonLaunchDescriptionSource(os.path.join(
+            launch_file_dir, 'f110_navigation.launch.py')),
         launch_arguments={
             'namespace': namespace.perform(context)+robot_index.perform(context),
         }.items(),
     )
     vicon_cmd = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(launch_file_dir, 'vicon_tf_converter.launch.py')),
+        PythonLaunchDescriptionSource(os.path.join(
+            launch_file_dir, 'vicon_tf_converter.launch.py')),
         launch_arguments={
             'namespace': namespace.perform(context)+robot_index.perform(context),
         }.items(),
     )
     cam_cmd = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(cam_launch_file_dir, 'cam_communication.launch.py')),
+        PythonLaunchDescriptionSource(os.path.join(
+            cam_launch_file_dir, 'cam_communication.launch.py')),
         launch_arguments={
             'namespace': namespace.perform(context)+robot_index.perform(context),
             'robot_index': robot_index,
@@ -81,6 +85,7 @@ def generate_launch_description():
     launch_description.add_action(namespace_arg)
     launch_description.add_action(robot_index_arg)
 
-    launch_description.add_action(OpaqueFunction(function=include_launch_description))
+    launch_description.add_action(OpaqueFunction(
+        function=include_launch_description))
 
     return launch_description

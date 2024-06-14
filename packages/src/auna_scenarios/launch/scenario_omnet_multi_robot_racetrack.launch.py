@@ -28,7 +28,8 @@ def generate_launch_description():
 
     # Launch Argument Configurations
     robot_number = LaunchConfiguration('robot_number', default='2')
-    world_name = LaunchConfiguration('world_name', default='racetrack_decorated')
+    world_name = LaunchConfiguration(
+        'world_name', default='racetrack_decorated')
 
     # Launch Arguments
     robot_number_arg = DeclareLaunchArgument(
@@ -44,13 +45,15 @@ def generate_launch_description():
 
     # Nodes and other launch files
     world_cmd = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(gazebo_launch_file_dir, 'gazebo_world.launch.py')),
+        PythonLaunchDescriptionSource(os.path.join(
+            gazebo_launch_file_dir, 'gazebo_world.launch.py')),
         launch_arguments={
             'world_name': world_name
         }.items(),
     )
     spawn_cmd = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(spawn_launch_file_dir, 'spawn_multi_robot.launch.py')),
+        PythonLaunchDescriptionSource(os.path.join(
+            spawn_launch_file_dir, 'spawn_multi_robot.launch.py')),
         launch_arguments={
             'robot_number': robot_number,
             'world_name': world_name,
@@ -58,13 +61,15 @@ def generate_launch_description():
         }.items(),
     )
     omnet_cmd = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(omnet_launch_file_dir, 'omnet_multi_robot_modules.launch.py')),
+        PythonLaunchDescriptionSource(os.path.join(
+            omnet_launch_file_dir, 'omnet_multi_robot_modules.launch.py')),
         launch_arguments={
             'robot_number': robot_number,
         }.items(),
     )
     nav_cmd = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(nav_launch_file_dir, 'navigation_multi_robot.launch.py')),
+        PythonLaunchDescriptionSource(os.path.join(
+            nav_launch_file_dir, 'navigation_multi_robot.launch.py')),
         launch_arguments={
             'robot_number': robot_number,
             'world_name': world_name,

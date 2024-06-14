@@ -23,7 +23,8 @@ def generate_launch_description():
     spawn_launch_file_dir = os.path.join(gazebo_pkg_dir, 'launch', 'spawn')
 
     # Launch Argument Configurations
-    world_name = LaunchConfiguration('world_name', default='racetrack_decorated')
+    world_name = LaunchConfiguration(
+        'world_name', default='racetrack_decorated')
     world_name = LaunchConfiguration('world_name')
 
     # Launch Arguments
@@ -35,13 +36,15 @@ def generate_launch_description():
 
     # Nodes and other launch files
     world_cmd = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(gazebo_launch_file_dir, 'gazebo_world.launch.py')),
+        PythonLaunchDescriptionSource(os.path.join(
+            gazebo_launch_file_dir, 'gazebo_world.launch.py')),
         launch_arguments={
             'world_name': world_name
         }.items(),
     )
     spawn_cmd = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(spawn_launch_file_dir, 'spawn_single_robot.launch.py')),
+        PythonLaunchDescriptionSource(os.path.join(
+            spawn_launch_file_dir, 'spawn_single_robot.launch.py')),
         launch_arguments={
             'world_name': world_name,
             'namespace': 'robot',

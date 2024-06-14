@@ -21,37 +21,34 @@
 #ifndef AUNA_PURE_PURSUIT_CONTROLLER__PATH_HANDLER_HPP_
 #define AUNA_PURE_PURSUIT_CONTROLLER__PATH_HANDLER_HPP_
 
+#include <algorithm>
+#include <memory>
+#include <mutex>
 #include <string>
 #include <vector>
-#include <memory>
-#include <algorithm>
-#include <mutex>
 
-#include "rclcpp/rclcpp.hpp"
+#include "geometry_msgs/msg/pose2_d.hpp"
+#include "nav2_core/exceptions.hpp"
 #include "nav2_costmap_2d/costmap_2d_ros.hpp"
 #include "nav2_costmap_2d/footprint_collision_checker.hpp"
-#include "nav2_util/odometry_utils.hpp"
 #include "nav2_util/geometry_utils.hpp"
-#include "nav2_core/exceptions.hpp"
-#include "geometry_msgs/msg/pose2_d.hpp"
+#include "nav2_util/odometry_utils.hpp"
+#include "rclcpp/rclcpp.hpp"
 
-namespace auna_pure_pursuit_controller
-{
+namespace auna_pure_pursuit_controller {
 
 /**
  * @class auna_pure_pursuit_controller::PathHandler
  * @brief Handles input paths to transform them to local frames required
  */
-class PathHandler
-{
-public:
+class PathHandler {
+ public:
   /**
    * @brief Constructor for auna_pure_pursuit_controller::PathHandler
    */
-  PathHandler(
-    tf2::Duration transform_tolerance,
-    std::shared_ptr<tf2_ros::Buffer> tf,
-    std::shared_ptr<nav2_costmap_2d::Costmap2DROS> costmap_ros);
+  PathHandler(tf2::Duration transform_tolerance,
+              std::shared_ptr<tf2_ros::Buffer> tf,
+              std::shared_ptr<nav2_costmap_2d::Costmap2DROS> costmap_ros);
 
   /**
    * @brief Destrructor for auna_pure_pursuit_controller::PathHandler
@@ -59,16 +56,18 @@ public:
   ~PathHandler() = default;
 
   /**
-   * @brief Transforms global plan into same frame as pose and clips poses ineligible for lookaheadPoint
-   * Points ineligible to be selected as a lookahead point if they are any of the following:
+   * @brief Transforms global plan into same frame as pose and clips poses
+   * ineligible for lookaheadPoint Points ineligible to be selected as a
+   * lookahead point if they are any of the following:
    * - Outside the local_costmap (collision avoidance cannot be assured)
    * @param pose pose to transform
-   * @param max_robot_pose_search_dist Distance to search for matching nearest path point
+   * @param max_robot_pose_search_dist Distance to search for matching nearest
+   * path point
    * @return Path in new frame
    */
   nav_msgs::msg::Path transformGlobalPlan(
-    const geometry_msgs::msg::PoseStamped & pose,
-    double max_robot_pose_search_dist);
+      const geometry_msgs::msg::PoseStamped& pose,
+      double max_robot_pose_search_dist);
 
   /**
    * @brief Transform a pose to another frame.
@@ -77,23 +76,22 @@ public:
    * @param out_pose transformed output
    * @return bool if successful
    */
-  bool transformPose(
-    const std::string frame,
-    const geometry_msgs::msg::PoseStamped & in_pose,
-    geometry_msgs::msg::PoseStamped & out_pose) const;
+  bool transformPose(const std::string frame,
+                     const geometry_msgs::msg::PoseStamped& in_pose,
+                     geometry_msgs::msg::PoseStamped& out_pose) const;
 
-  void setPlan(const nav_msgs::msg::Path & path) {global_plan_ = path;}
+  void setPlan(const nav_msgs::msg::Path& path) { global_plan_ = path; }
 
-  nav_msgs::msg::Path getPlan() {return global_plan_;}
+  nav_msgs::msg::Path getPlan() { return global_plan_; }
 
-protected:
+ protected:
   /**
    * Get the greatest extent of the costmap in meters from the center.
    * @return max of distance from center in meters to edge of costmap
    */
   double getCostmapMaxExtent() const;
 
-  rclcpp::Logger logger_ {rclcpp::get_logger("RPPPathHandler")};
+  rclcpp::Logger logger_{rclcpp::get_logger("RPPPathHandler")};
   tf2::Duration transform_tolerance_;
   std::shared_ptr<tf2_ros::Buffer> tf_;
   std::shared_ptr<nav2_costmap_2d::Costmap2DROS> costmap_ros_;

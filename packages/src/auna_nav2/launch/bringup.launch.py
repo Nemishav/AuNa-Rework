@@ -87,7 +87,8 @@ def generate_launch_description():
         SetRemap('/tf_static', 'tf_static'),
 
         IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(os.path.join(launch_dir, 'slam.launch.py')),
+            PythonLaunchDescriptionSource(
+                os.path.join(launch_dir, 'slam.launch.py')),
             condition=IfCondition(enable_slam),
             launch_arguments={'namespace': namespace,
                               'use_sim_time': use_sim_time,
@@ -105,7 +106,8 @@ def generate_launch_description():
                               'params_file': params_file}.items()),
 
         IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(os.path.join(launch_dir, 'navigation.launch.py')),
+            PythonLaunchDescriptionSource(os.path.join(
+                launch_dir, 'navigation.launch.py')),
             condition=IfCondition(enable_navigation),
             launch_arguments={'namespace': namespace,
                               'use_sim_time': use_sim_time,

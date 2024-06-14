@@ -21,23 +21,21 @@
 #ifndef AUNA_PURE_PURSUIT_CONTROLLER__PARAMETER_HANDLER_HPP_
 #define AUNA_PURE_PURSUIT_CONTROLLER__PARAMETER_HANDLER_HPP_
 
+#include <algorithm>
+#include <memory>
+#include <mutex>
 #include <string>
 #include <vector>
-#include <memory>
-#include <algorithm>
-#include <mutex>
 
-#include "rclcpp/rclcpp.hpp"
-#include "rclcpp_lifecycle/lifecycle_node.hpp"
-#include "nav2_util/odometry_utils.hpp"
 #include "nav2_util/geometry_utils.hpp"
 #include "nav2_util/node_utils.hpp"
+#include "nav2_util/odometry_utils.hpp"
+#include "rclcpp/rclcpp.hpp"
+#include "rclcpp_lifecycle/lifecycle_node.hpp"
 
-namespace auna_pure_pursuit_controller
-{
+namespace auna_pure_pursuit_controller {
 
-struct Parameters
-{
+struct Parameters {
   double desired_linear_vel, base_desired_linear_vel;
   double lookahead_dist;
   double rotate_to_heading_angular_vel;
@@ -71,40 +69,39 @@ struct Parameters
  * @class auna_pure_pursuit_controller::ParameterHandler
  * @brief Handles parameters and dynamic parameters for RPP
  */
-class ParameterHandler
-{
-public:
+class ParameterHandler {
+ public:
   /**
    * @brief Constructor for auna_pure_pursuit_controller::ParameterHandler
    */
-  ParameterHandler(
-    rclcpp_lifecycle::LifecycleNode::SharedPtr node,
-    std::string & plugin_name,
-    rclcpp::Logger & logger, const double costmap_size_x);
+  ParameterHandler(rclcpp_lifecycle::LifecycleNode::SharedPtr node,
+                   std::string& plugin_name, rclcpp::Logger& logger,
+                   const double costmap_size_x);
 
   /**
    * @brief Destrructor for auna_pure_pursuit_controller::ParameterHandler
    */
   ~ParameterHandler() = default;
 
-  std::mutex & getMutex() {return mutex_;}
+  std::mutex& getMutex() { return mutex_; }
 
-  Parameters * getParams() {return &params_;}
+  Parameters* getParams() { return &params_; }
 
-protected:
+ protected:
   /**
    * @brief Callback executed when a parameter change is detected
    * @param event ParameterEvent message
    */
-  rcl_interfaces::msg::SetParametersResult
-  dynamicParametersCallback(std::vector<rclcpp::Parameter> parameters);
+  rcl_interfaces::msg::SetParametersResult dynamicParametersCallback(
+      std::vector<rclcpp::Parameter> parameters);
 
   // Dynamic parameters handler
   std::mutex mutex_;
-  rclcpp::node_interfaces::OnSetParametersCallbackHandle::SharedPtr dyn_params_handler_;
+  rclcpp::node_interfaces::OnSetParametersCallbackHandle::SharedPtr
+      dyn_params_handler_;
   Parameters params_;
   std::string plugin_name_;
-  rclcpp::Logger logger_ {rclcpp::get_logger("AuNaPurePursuitController")};
+  rclcpp::Logger logger_{rclcpp::get_logger("AuNaPurePursuitController")};
 };
 
 }  // namespace auna_pure_pursuit_controller

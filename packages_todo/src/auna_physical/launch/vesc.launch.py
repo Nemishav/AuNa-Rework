@@ -24,10 +24,11 @@ def include_launch_description(context: LaunchContext):
     vesc_config = LaunchConfiguration('vesc_config')
 
     remappings = [('/tf', 'tf'),
-                ('/tf_static', 'tf_static')]
+                  ('/tf_static', 'tf_static')]
 
     tmp_params_file = yaml_launch.get_yaml(vesc_config.perform(context))
-    tmp_params_file = yaml_launch.insert_namespace(tmp_params_file, context.launch_configurations['namespace'])
+    tmp_params_file = yaml_launch.insert_namespace(
+        tmp_params_file, context.launch_configurations['namespace'])
     tmp_params_file = yaml_launch.get_temp_file(tmp_params_file)
 
     # Nodes and other launch files
@@ -36,7 +37,8 @@ def include_launch_description(context: LaunchContext):
         executable='vesc_driver_node',
         name='vesc_driver_node',
         namespace=namespace,
-        parameters=[yaml_launch.get_yaml_value(tmp_params_file, ['vesc_driver_node', 'ros__parameters'])],
+        parameters=[yaml_launch.get_yaml_value(
+            tmp_params_file, ['vesc_driver_node', 'ros__parameters'])],
         output='screen'
     )
 
@@ -45,7 +47,8 @@ def include_launch_description(context: LaunchContext):
         executable='vesc_to_odom_node',
         name='vesc_to_odom_node',
         namespace=namespace,
-        parameters=[yaml_launch.get_yaml_value(tmp_params_file, ['vesc_to_odom_node', 'ros__parameters'])],
+        parameters=[yaml_launch.get_yaml_value(
+            tmp_params_file, ['vesc_to_odom_node', 'ros__parameters'])],
         output='screen',
         remappings=remappings
     )
@@ -55,7 +58,8 @@ def include_launch_description(context: LaunchContext):
         executable='ackermann_to_vesc_node',
         name='ackermann_to_vesc_node',
         namespace=namespace,
-        parameters=[yaml_launch.get_yaml_value(tmp_params_file, ['ackermann_to_vesc_node', 'ros__parameters'])],
+        parameters=[yaml_launch.get_yaml_value(
+            tmp_params_file, ['ackermann_to_vesc_node', 'ros__parameters'])],
         output='screen'
     )
 
@@ -78,8 +82,8 @@ def generate_launch_description():
 
     # Launch arguments
     namespace_arg = DeclareLaunchArgument('namespace', default_value='robot')
-    vesc_config_arg = DeclareLaunchArgument('vesc_config', default_value=vesc_config)
-
+    vesc_config_arg = DeclareLaunchArgument(
+        'vesc_config', default_value=vesc_config)
 
     # Launch Description
     launch_description = LaunchDescription()
@@ -87,6 +91,7 @@ def generate_launch_description():
     launch_description.add_action(namespace_arg)
     launch_description.add_action(vesc_config_arg)
 
-    launch_description.add_action(OpaqueFunction(function=include_launch_description))
+    launch_description.add_action(OpaqueFunction(
+        function=include_launch_description))
 
     return launch_description
