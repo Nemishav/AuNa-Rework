@@ -74,9 +74,17 @@ def include_launch_description(context: LaunchContext):
         parameters=[configured_params],
         remappings=remappings))
 
+    # cmds.append(Node(
+    #     package='nav2_recoveries',
+    #     executable='recoveries_server',
+    #     name='recoveries_server',
+    #     output='screen',
+    #     parameters=[configured_params],
+    #     remappings=remappings))
+
     cmds.append(Node(
-        package='nav2_recoveries',
-        executable='recoveries_server',
+        package='nav2_behaviors',
+        executable='behavior_server',
         name='recoveries_server',
         output='screen',
         parameters=[configured_params],

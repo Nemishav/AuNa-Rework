@@ -50,11 +50,11 @@ EXPOSE 11345
 # --- Install AuNa ---
 
 RUN apt-get update
-RUN apt-get -y install python3-pip python3-colcon-common-extensions ros-humble-xacro ros-humble-rmw-cyclonedds-cpp ros-humble-gazebo-ros-pkgs ros-humble-navigation2 ros-humble-nav2-bringup ros-humble-libg2o libspnav-dev libasio-dev libbluetooth-dev libcwiid-dev libgeographic-dev ros-humble-ackermann-msgs
+RUN apt-get -y install python3-pip python3-colcon-common-extensions ros-humble-xacro ros-humble-rmw-cyclonedds-cpp ros-humble-gazebo-ros-pkgs ros-humble-navigation2 ros-humble-nav2-bringup ros-humble-libg2o libspnav-dev libasio-dev libbluetooth-dev libcwiid-dev libgeographic-dev ros-humble-ackermann-msgs libpaho-mqtt-dev
 
 # --- Install DevTools ---
 
-RUN apt-get -y install clangd clang-format clang-tidy cppcheck
+RUN apt-get -y install clangd clang-format clang-tidy cppcheck libpaho-mqttpp-dev
 RUN pip install pep8 pylint
 
 # --- Set up user ---
@@ -63,6 +63,7 @@ RUN pip install pep8 pylint
 USER vscode
 
 # source ROS2 setup file
+RUN echo 'export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp' >> /home/vscode/.bashrc
 RUN echo '. /opt/ros/humble/setup.sh' >> /home/vscode/.bashrc
 
 # configure environment variables

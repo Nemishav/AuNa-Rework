@@ -1,10 +1,11 @@
+#!/usr/bin/env python3
+
 # Copyright (c) 2024 Harun Teper
 #
 # Use of this source code is governed by an MIT-style
 # license that can be found in the LICENSE file or at
 # https://opensource.org/licenses/MIT.
 
-#!/usr/bin/env python3
 
 import os
 import select
@@ -107,7 +108,7 @@ def main():
 
     qos = QoSProfile(depth=10)
     node = rclpy.create_node('teleop_keyboard')
-    pub = node.create_publisher(Twist, '/cmd_vel', qos)
+    pub = node.create_publisher(Twist, 'robot0/cmd_vel', qos)
 
     status = 0
     target_linear_velocity = 0.0
@@ -117,7 +118,7 @@ def main():
 
     try:
         print(msg)
-        while(1):
+        while (1):
             key = get_key(settings)
             if key == 'w':
                 target_linear_velocity =\
