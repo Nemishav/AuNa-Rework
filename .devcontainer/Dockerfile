@@ -54,7 +54,7 @@ RUN apt-get -y install python3-pip python3-colcon-common-extensions ros-humble-x
 
 # --- Install DevTools ---
 
-RUN apt-get -y install clangd clang-format clang-tidy cppcheck libpaho-mqttpp-dev
+RUN apt-get -y install clangd clang-format clang-tidy cppcheck libpaho-mqttpp-dev 
 RUN pip install pep8 pylint
 
 # --- Set up user ---

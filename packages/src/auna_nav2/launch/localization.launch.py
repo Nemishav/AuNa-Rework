@@ -23,7 +23,9 @@ def generate_launch_description():
     # Get the launch directory
     pkg_dir = get_package_share_directory('nav2_bringup')
     bringup_dir = get_package_share_directory('nav2_bringup')
-    config_dir = os.path.join(pkg_dir, 'config', 'nav2_params')
+    config_dir = os.path.join(pkg_dir, 'params')
+    # config_dir = os.path.join(pkg_dir, 'config', 'nav2_params')
+    print(f'config_dir: {config_dir}')
 
     namespace = LaunchConfiguration('namespace')
     map_yaml_file = LaunchConfiguration('map')

@@ -25,7 +25,7 @@ def generate_launch_description():
     bringup_dir = get_package_share_directory('nav2_bringup')
     config_dir = os.path.join(pkg_dir, 'config', 'nav2_params')
 
-    namespace = LaunchConfiguration('namespace')
+    # namespace = LaunchConfiguration('namespace')
     map_yaml_file = LaunchConfiguration('map')
     use_sim_time = LaunchConfiguration('use_sim_time')
     autostart = LaunchConfiguration('autostart')
@@ -66,7 +66,7 @@ def generate_launch_description():
             executable='map_server',
             name='map_server',
             output='screen',
-            namespace=namespace,
+            # namespace=namespace,
             parameters=[{'yaml_filename': map_yaml_file,
                          'use_sim_time': use_sim_time}],
             remappings=remappings),
@@ -76,7 +76,7 @@ def generate_launch_description():
             executable='lifecycle_manager',
             name='lifecycle_manager_localization',
             output='screen',
-            namespace=namespace,
+            # namespace=namespace,
             parameters=[{'use_sim_time': use_sim_time},
                         {'autostart': autostart},
                         {'node_names': lifecycle_nodes}])

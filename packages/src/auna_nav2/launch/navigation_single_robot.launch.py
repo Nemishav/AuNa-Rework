@@ -20,6 +20,7 @@ def include_launch_description(context: LaunchContext):
 
     # Package Directories
     pkg_dir = get_package_share_directory('auna_nav2')
+    gazebo_pkg_dir = get_package_share_directory('auna_gazebo')
 
     # Paths to folders and files
     nav_launch_file_dir = os.path.join(pkg_dir, 'launch')
@@ -32,11 +33,15 @@ def include_launch_description(context: LaunchContext):
     params_file = LaunchConfiguration('params_file')
     rviz_config = LaunchConfiguration('rviz_config')
     use_sim_time = LaunchConfiguration('use_sim_time')
+    world_name = LaunchConfiguration('world_name')
     enable_slam = LaunchConfiguration('enable_slam')
     enable_localization = LaunchConfiguration('enable_localization')
     enable_navigation = LaunchConfiguration('enable_navigation')
     enable_rviz = LaunchConfiguration('enable_rviz')
     enable_map_server = LaunchConfiguration('enable_map_server')
+
+    map_path = os.path.join(gazebo_pkg_dir, "config",
+                            "map_params", world_name.perform(context)+".yaml")
 
     tmp_params_file = yaml_launch.get_yaml(params_file.perform(context))
     tmp_params_file = yaml_launch.insert_namespace(
@@ -53,23 +58,14 @@ def include_launch_description(context: LaunchContext):
                 'autostart': autostart,
                 'default_bt_xml_filename': default_bt_xml_filename,
                 'map': map_file,
+                # 'map': map_path,
                 'namespace': namespace,
                 'params_file': tmp_params_file,
                 'use_sim_time': use_sim_time,
+                'world_name': world_name,
                 'enable_slam': enable_slam,
                 'enable_localization': enable_localization,
                 'enable_navigation': enable_navigation,
-            }.items(),
-        ),
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(os.path.join(
-                nav_launch_file_dir, 'map_server.launch.py')),
-            condition=IfCondition(enable_map_server),
-            launch_arguments={
-                'namespace': namespace,
-                'map': map_file,
-                'use_sim_time': use_sim_time,
-                'autostart': autostart,
             }.items(),
         ),
         IncludeLaunchDescription(
@@ -143,6 +139,11 @@ def generate_launch_description():
         default_value='true',
         description='Use simulation (Gazebo) clock if true'
     )
+    world_name_arg = DeclareLaunchArgument(
+        'world_name',
+        default_value='racetrack_decorated',
+        description='Gazebo world file name in /worlds folder'
+    )
     use_enable_slam_arg = DeclareLaunchArgument(
         name='enable_slam',
         default_value='False',
@@ -178,6 +179,7 @@ def generate_launch_description():
     launch_description.add_action(params_file_arg)
     launch_description.add_action(rviz_config_arg)
     launch_description.add_action(use_sim_time_arg)
+    launch_description.add_action(world_name_arg)
     launch_description.add_action(use_enable_slam_arg)
     launch_description.add_action(use_enable_localization_arg)
     launch_description.add_action(use_enable_navigation_arg)

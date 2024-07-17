@@ -36,6 +36,7 @@ def generate_launch_description():
     enable_slam = LaunchConfiguration('enable_slam')
     enable_localization = LaunchConfiguration('enable_localization')
     enable_navigation = LaunchConfiguration('enable_navigation')
+    enable_map_server = LaunchConfiguration('enable_map_server')
 
     stdout_linebuf_envvar = SetEnvironmentVariable(
         'RCUTILS_LOGGING_BUFFERED_STREAM', '1')
@@ -87,6 +88,17 @@ def generate_launch_description():
         SetRemap('/tf_static', 'tf_static'),
 
         IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(os.path.join(
+                launch_dir, 'map_server.launch.py')),
+            condition=IfCondition(enable_map_server),
+            launch_arguments={
+                'namespace': namespace,
+                'map': map_yaml_file,
+                'use_sim_time': use_sim_time,
+                'autostart': autostart,
+            }.items(),
+        ),
+        IncludeLaunchDescription(
             PythonLaunchDescriptionSource(
                 os.path.join(launch_dir, 'slam.launch.py')),
             condition=IfCondition(enable_slam),
@@ -115,6 +127,8 @@ def generate_launch_description():
                               'params_file': params_file,
                               'use_lifecycle_mgr': 'false',
                               'map_subscribe_transient_local': 'true'}.items()),
+
+
     ])
 
     # Create the launch description and populate
